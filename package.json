@@ -1,0 +1,78 @@
+{
+  "name": "@cyguin/announce",
+  "version": "0.1.0",
+  "description": "In-app announcement banner for Next.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cyguin/announce"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./next": {
+      "import": "./dist/next.js",
+      "types": "./dist/next.d.ts"
+    },
+    "./handlers": {
+      "import": "./dist/handlers/route.js",
+      "types": "./dist/handlers/route.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    },
+    "./adapters/sqlite": {
+      "import": "./dist/adapters/sqlite.js",
+      "types": "./dist/adapters/sqlite.d.ts"
+    },
+    "./adapters/postgres": {
+      "import": "./dist/adapters/postgres.js",
+      "types": "./dist/adapters/postgres.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "nanoid": "^5.0.7"
+  },
+  "peerDependencies": {
+    "better-sqlite3": ">=11",
+    "next": ">=14",
+    "postgres": ">=3",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "better-sqlite3": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "postgres": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^20.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^18.0.0",
+    "better-sqlite3": "^11.0.0",
+    "next": "^14.0.0",
+    "postgres": "^3.4.0",
+    "react": "^18.3.1",
+    "tsup": "^8.3.0",
+    "typescript": "^5.5.0"
+  }
+}
