@@ -18,7 +18,7 @@ interface FetchedData {
 export function AnnouncementBanner({
   apiBase = '/api/announce',
   userId,
-  theme = 'light',
+  theme = 'dark',
   className = '',
   onDismiss,
 }: AnnouncementBannerProps) {
