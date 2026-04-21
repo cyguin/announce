@@ -9,7 +9,7 @@ function adapter(): AnnounceAdapter {
     create: vi.fn().mockResolvedValue({
       id: 'ann_1',
       title: 'Launch',
-      body: 'Cyguin shipped.',
+      body: 'cyguin shipped.',
       active_from: Date.now(),
       active_until: Date.now() + 1000,
       created_at: Date.now(),
@@ -28,7 +28,7 @@ describe('createAnnounceHandler auth', () => {
     const response = await handler(
       new NextRequest('https://example.com/api/cyguin/announcements', {
         method: 'POST',
-        body: JSON.stringify({ title: 'Launch', body: 'Cyguin shipped.' }),
+        body: JSON.stringify({ title: 'Launch', body: 'cyguin shipped.' }),
       })
     );
 
