@@ -83,24 +83,24 @@ export function AnnouncementBanner({
         }
         .cyguin-announce-banner {
           --cyguin-bg: #ffffff;
-          --cyguin-bg-subtle: #f5f5f5;
+          --cyguin-bg-subtle: #f1f3f6;
           --cyguin-border: #e5e5e5;
-          --cyguin-fg: #0a0a0a;
-          --cyguin-fg-muted: #888888;
-          --cyguin-accent: #f5a800;
-          --cyguin-accent-dark: #c47f00;
-          --cyguin-accent-fg: #0a0a0a;
+          --cyguin-fg: #0a0d17;
+          --cyguin-fg-muted: #858b98;
+          --cyguin-accent: #ffd21f;
+          --cyguin-accent-dark: #e0a900;
+          --cyguin-accent-fg: #0a0d17;
           --cyguin-radius: 6px;
           --cyguin-shadow: 0 1px 4px rgba(0,0,0,0.08);
           animation: cyguin-announce-slide-in 0.2s ease-out;
         }
         .cyguin-announce-banner[data-theme="dark"] {
-          --cyguin-bg: #0a0a0a;
-          --cyguin-bg-subtle: #1a1a1a;
-          --cyguin-border: #2a2a2a;
-          --cyguin-fg: #f5f5f5;
-          --cyguin-fg-muted: #888888;
-          --cyguin-shadow: 0 1px 4px rgba(0,0,0,0.4);
+          --cyguin-bg: #0a0d17;
+          --cyguin-bg-subtle: #101521;
+          --cyguin-border: #252b3a;
+          --cyguin-fg: #f1f3f6;
+          --cyguin-fg-muted: #858b98;
+          --cyguin-shadow: 0 1px 4px rgba(0,0,0,0.32);
         }
         .cyguin-announce-banner {
           display: flex;
