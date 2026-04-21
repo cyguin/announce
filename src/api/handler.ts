@@ -6,6 +6,7 @@ interface HandlerOptions {
   options?: {
     defaultActiveDays?: number;
     maxActive?: number;
+    secret?: string;
   };
 }
 
@@ -14,7 +15,19 @@ function parseJsonBody<T>(req: NextRequest): Promise<T> {
 }
 
 export function createAnnounceHandler({ adapter, options = {} }: HandlerOptions) {
-  const { defaultActiveDays = 7, maxActive = 3 } = options;
+  const { defaultActiveDays = 7, maxActive = 3, secret } = options;
+
+  function requireAdmin(req: NextRequest): NextResponse | null {
+    if (!secret) {
+      return NextResponse.json({ error: 'Announce secret is not configured' }, { status: 500 });
+    }
+
+    if (req.headers.get('authorization') !== `Bearer ${secret}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    return null;
+  }
 
   return async function handler(req: NextRequest) {
     const url = req.nextUrl.clone();
@@ -39,6 +52,9 @@ export function createAnnounceHandler({ adapter, options = {} }: HandlerOptions)
 
       if (req.method === 'POST') {
         if (remaining.length === 1) {
+          const authError = requireAdmin(req);
+          if (authError) return authError;
+
           const body = await parseJsonBody<CreateAnnouncementInput>(req);
           if (!body.title || !body.body) {
             return NextResponse.json({ error: 'title and body are required' }, { status: 400 });
@@ -79,6 +95,9 @@ export function createAnnounceHandler({ adapter, options = {} }: HandlerOptions)
           return NextResponse.json({ success: true });
         }
         if (remaining.length === 1) {
+          const authError = requireAdmin(req);
+          if (authError) return authError;
+
           const id = remaining[0];
           await adapter.remove(id);
           return NextResponse.json({ success: true });
@@ -88,8 +107,8 @@ export function createAnnounceHandler({ adapter, options = {} }: HandlerOptions)
 
       return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      return NextResponse.json({ error: message }, { status: 500 });
+      console.error('Announce handler error:', err);
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
   };
 }

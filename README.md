@@ -23,7 +23,12 @@ const db = new Database('announce.db');
 db.pragma('journal_mode = WAL');
 const adapter = createSQLiteAdapter(db);
 
-const handler = createAnnounceHandler({ adapter });
+const handler = createAnnounceHandler({
+  adapter,
+  options: {
+    secret: process.env.ANNOUNCE_SECRET,
+  },
+});
 
 export { handler as GET, handler as POST, handler as DELETE };
 ```
@@ -48,7 +53,15 @@ CREATE TABLE IF NOT EXISTS announcement_dismissals (
 );
 ```
 
-### 3. Add the banner
+### 3. Set the admin API secret
+
+```bash
+ANNOUNCE_SECRET=change-me
+```
+
+Creating and deleting announcements requires `Authorization: Bearer $ANNOUNCE_SECRET`. Listing active announcements and user dismissals remain public widget actions.
+
+### 4. Add the banner
 
 ```tsx
 import { AnnouncementBanner } from '@cyguin/announce/react';
@@ -77,7 +90,12 @@ import { createPostgresAdapter } from '@cyguin/announce/adapters/postgres';
 const sql = postgres(process.env.DATABASE_URL!);
 const adapter = createPostgresAdapter(sql);
 
-const handler = createAnnounceHandler({ adapter });
+const handler = createAnnounceHandler({
+  adapter,
+  options: {
+    secret: process.env.ANNOUNCE_SECRET,
+  },
+});
 
 export { handler as GET, handler as POST, handler as DELETE };
 ```
@@ -87,8 +105,8 @@ export { handler as GET, handler as POST, handler as DELETE };
 | Method | Route | Description |
 |--------|-------|-------------|
 | GET | `/api/announce/cyguin?userId=xxx` | List active announcements for user |
-| POST | `/api/announce/cyguin` | Create announcement |
-| DELETE | `/api/announce/cyguin/:id` | Delete announcement |
+| POST | `/api/announce/cyguin` | Create announcement (requires Bearer token) |
+| DELETE | `/api/announce/cyguin/:id` | Delete announcement (requires Bearer token) |
 | POST | `/api/announce/cyguin/:id/dismiss?userId=xxx` | Dismiss for user |
 
 ## Theming
@@ -130,6 +148,7 @@ createAnnounceHandler({
   options: {
     defaultActiveDays: 7,  // auto-expire after N days
     maxActive: 3,         // max simultaneous active announcements
+    secret: process.env.ANNOUNCE_SECRET,
   },
 })
 ```

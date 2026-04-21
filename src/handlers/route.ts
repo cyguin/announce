@@ -2,8 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAnnounceHandler } from '../api/handler.js';
 import type { AnnounceAdapter } from '../types.js';
 
-export function createRouteHandler(adapter: AnnounceAdapter) {
-  const handler = createAnnounceHandler({ adapter });
+interface RouteHandlerOptions {
+  secret?: string;
+}
+
+function requireAdmin(req: NextRequest, secret?: string): NextResponse | null {
+  if (!secret) {
+    return NextResponse.json({ error: 'Announce secret is not configured' }, { status: 500 });
+  }
+
+  if (req.headers.get('authorization') !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  return null;
+}
+
+export function createRouteHandler(adapter: AnnounceAdapter, options?: RouteHandlerOptions) {
+  const handler = createAnnounceHandler({ adapter, options });
+  const secret = options?.secret;
 
   return async function routeHandler(req: NextRequest) {
     const url = req.nextUrl.clone();
@@ -38,6 +55,9 @@ export function createRouteHandler(adapter: AnnounceAdapter) {
         }
 
         if (remaining.length === 0) {
+          const authError = requireAdmin(req, secret);
+          if (authError) return authError;
+
           const body = await req.json();
           if (!body.title || !body.body) {
             return NextResponse.json(
@@ -59,6 +79,9 @@ export function createRouteHandler(adapter: AnnounceAdapter) {
       }
 
       if (req.method === 'DELETE') {
+        const authError = requireAdmin(req, secret);
+        if (authError) return authError;
+
         const id = url.searchParams.get('id');
         if (!id) {
           return NextResponse.json({ error: 'id query param required' }, { status: 400 });
@@ -69,8 +92,8 @@ export function createRouteHandler(adapter: AnnounceAdapter) {
 
       return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      return NextResponse.json({ error: message }, { status: 500 });
+      console.error('Announce route handler error:', err);
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
   };
 }
