@@ -72,7 +72,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <AnnouncementBanner
         apiBase="/api/announce"
         userId={currentUser.id}
-        theme="light"
+        theme="dark"
       />
       {children}
     </>
@@ -111,6 +111,8 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 ## Theming
 
+`AnnouncementBanner` defaults to the cyguin dark theme. Pass `theme="light"` to opt into the light theme.
+
 Use `--cyguin-*` CSS custom properties on `.cyguin-announce-banner`:
 
 ```css
@@ -124,10 +126,10 @@ Use `--cyguin-*` CSS custom properties on `.cyguin-announce-banner`:
 }
 ```
 
-Switch to dark theme with the `theme` prop:
+Switch to light theme with the `theme` prop:
 
 ```tsx
-<AnnouncementBanner theme="dark" ... />
+<AnnouncementBanner theme="light" ... />
 ```
 
 Dark theme applies these overrides automatically:

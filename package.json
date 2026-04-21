@@ -1,6 +1,6 @@
 {
   "name": "@cyguin/announce",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "In-app announcement banner for Next.js",
   "license": "MIT",
   "keywords": [
