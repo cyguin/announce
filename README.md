@@ -1,6 +1,6 @@
 # @cyguin/announce
 
-DB-backed, per-user dismissible announcement banner for Next.js apps.
+DB-backed, per-user dismissible announcement banners for Next.js. Create announcements from an admin API, users see them once and dismiss them.
 
 ## Install
 
@@ -12,7 +12,7 @@ npm install @cyguin/announce
 
 ### 1. Create the API route
 
-Create `app/api/announce/[...cyguin]/route.ts` in your Next.js app:
+`app/api/announce/[...cyguin]/route.ts`:
 
 ```ts
 import { createAnnounceHandler } from '@cyguin/announce/next';
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS announcement_dismissals (
 ANNOUNCE_SECRET=change-me
 ```
 
-Creating and deleting announcements requires `Authorization: Bearer $ANNOUNCE_SECRET`. Listing active announcements and user dismissals remain public widget actions.
+Creating and deleting announcements needs `Authorization: Bearer $ANNOUNCE_SECRET`. Listing and dismissing is public — the widget handles that.
 
 ### 4. Add the banner
 
@@ -105,15 +105,13 @@ export { handler as GET, handler as POST, handler as DELETE };
 | Method | Route | Description |
 |--------|-------|-------------|
 | GET | `/api/announce/cyguin?userId=xxx` | List active announcements for user |
-| POST | `/api/announce/cyguin` | Create announcement (requires Bearer token) |
-| DELETE | `/api/announce/cyguin/:id` | Delete announcement (requires Bearer token) |
+| POST | `/api/announce/cyguin` | Create announcement (Bearer token required) |
+| DELETE | `/api/announce/cyguin/:id` | Delete announcement (Bearer token required) |
 | POST | `/api/announce/cyguin/:id/dismiss?userId=xxx` | Dismiss for user |
 
 ## Theming
 
-`AnnouncementBanner` defaults to the cyguin dark theme. Pass `theme="light"` to opt into the light theme.
-
-Use `--cyguin-*` CSS custom properties on `.cyguin-announce-banner`:
+The banner is dark by default. Pass `theme="light"` to switch. Customize `--cyguin-*` variables on `.cyguin-announce-banner`:
 
 ```css
 .cyguin-announce-banner {
@@ -126,13 +124,7 @@ Use `--cyguin-*` CSS custom properties on `.cyguin-announce-banner`:
 }
 ```
 
-Switch to light theme with the `theme` prop:
-
-```tsx
-<AnnouncementBanner theme="light" ... />
-```
-
-Dark theme applies these overrides automatically:
+Dark mode auto-applies these:
 
 ```css
 --cyguin-bg: #0a0a0a;
@@ -149,7 +141,7 @@ createAnnounceHandler({
   adapter,
   options: {
     defaultActiveDays: 7,  // auto-expire after N days
-    maxActive: 3,         // max simultaneous active announcements
+    maxActive: 3,          // max simultaneous active announcements
     secret: process.env.ANNOUNCE_SECRET,
   },
 })
