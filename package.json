@@ -54,7 +54,9 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "pack:check": "npm pack --dry-run",
-    "prepublishOnly": "npm run build && npm test && npm run pack:check"
+    "prepublishOnly": "npm run build && npm test && npm run pack:check",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "nanoid": "^5.0.7"
