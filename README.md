@@ -1,3 +1,5 @@
+> **This package is no longer actively maintained.** cyguin has narrowed focus to security research (PSCryptoPatterns, PSCertPatterns, PSCMSPatterns). Existing published versions remain on npm and MIT-licensed, but no further releases are planned. See cyguin.com for current work.
+
 # @cyguin/announce
 
 DB-backed, per-user dismissible announcement banners for Next.js. Create announcements from an admin API, users see them once and dismiss them.
